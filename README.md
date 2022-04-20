@@ -16,7 +16,16 @@ module.exports = {
         {
             resolve: "gatsby-source-custom-api",
             options: {
-                url: "www.my-custom-api.com"
+                url: "www.my-custom-api.com",
+                fetchOptions: {
+                    method: "POST" // or "GET"
+                    headers: {
+                        //...,
+                    }
+                    body: JSON.stringify({
+                        //...,
+                    }),
+                }
             }
         }
     ]
@@ -25,14 +34,14 @@ module.exports = {
 
 ## Options
 
-| **Name**  | **Type**         | **Description**                                                                                                                                                                                         |
-| :-------- | :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| url       | object or string | `Required.` Url of your API as a string. If you have two different APIs for development and production, define an object with the keys `production` and `development`.                                  |
-| headers       | object | Request headers. Format is the identical to that accepted by the Headers constructor. See https://www.npmjs.com/package/node-fetch
-| auth       | object | `Optional`. Define the auth for your API in the following format: `{ username: "username", password: "password" }`.                                  |
-| rootKey   | string           | `Optional.` Name your API.                                                                                                                                                                              |
-| imageKeys | array            | Define the keys of image objects. These must have a childkey called `url`, which is a string that defines the path to an image file. Gatsby-Images are added as childkey `local`. Default: `['image']`. |
-| schemas   | object           | Define default-schemas for the objects of your API. See "Provide Default Schemas" for more information.                                                                                                 |
+| **Name**     | **Type**         | **Description**                                                                                                                                                                                                     |
+| :----------- | :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| url          | object or string | `Required.` Url of your API as a string. If you have two different APIs for development and production, define an object with the keys `production` and `development`.                                              |
+| fetchOptions | object           | fetch equivalent init Object. Format is the identical to that accepted by the fetch init object. See https://www.npmjs.com/package/node-fetch . In addition to headers it also allows using custom method and body. |
+| auth         | object           | `Optional`. Define the auth for your API in the following format: `{ username: "username", password: "password" }`.                                                                                                 |
+| rootKey      | string           | `Optional.` Name your API.                                                                                                                                                                                          |
+| imageKeys    | array            | Define the keys of image objects. These must have a childkey called `url`, which is a string that defines the path to an image file. Gatsby-Images are added as childkey `local`. Default: `['image']`.             |
+| schemas      | object           | Define default-schemas for the objects of your API. See "Provide Default Schemas" for more information.                                                                                                             |
 
 ## Provide Default Schemas
 
@@ -41,56 +50,56 @@ You need to provide default schemas for the arrays and objects of your API to av
 ```javascript
 // Lets assume this is the data from your API:
 const exampleDataFromApi = [
-    {
-        url: "post-1",
-        images: [
-            {
-                url: "image-1.jpg",
-                modified: 1556752476267
-            },
-            {
-                url: "image-2.jpg",
-                modified: 1556752702168
-            }
-        ],
-        author: {
-            firstname: "John",
-            lastname: "Doe"
-        }
-    }
+  {
+    url: "post-1",
+    images: [
+      {
+        url: "image-1.jpg",
+        modified: 1556752476267,
+      },
+      {
+        url: "image-2.jpg",
+        modified: 1556752702168,
+      },
+    ],
+    author: {
+      firstname: "John",
+      lastname: "Doe",
+    },
+  },
 ];
 
 // This is the content of your gatsby-config.js
 // and what you need to provide as schema:
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-custom-api",
-            options: {
-                url: {
-                    development: "http://my-local-api.dev", // on "gatsby develop"
-                    production: "https://my-remote-api.com" // on "gatsby build"
-                },
-                imageKeys: ["images"],
-                rootKey: "posts",
-                schemas: {
-                    posts: `
+  plugins: [
+    {
+      resolve: "gatsby-source-custom-api",
+      options: {
+        url: {
+          development: "http://my-local-api.dev", // on "gatsby develop"
+          production: "https://my-remote-api.com", // on "gatsby build"
+        },
+        imageKeys: ["images"],
+        rootKey: "posts",
+        schemas: {
+          posts: `
                         url: String
                         images: [images]
                         author: author
                     `,
-                    images: `
+          images: `
                         url: String
                         modified: Int
                     `,
-                    author: `
+          author: `
                         firstname: String
                         lastname: String
-                    `
-                }
-            }
-        }
-    ]
+                    `,
+        },
+      },
+    },
+  ],
 };
 ```
 
@@ -103,34 +112,34 @@ You can connect the different APIs with `@link`. Find out more about this at htt
 
 ```javascript
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-custom-api",
-            options: {
-                url: "https://my-first-api.com",
-                rootKey: 'authors',
-                schemas:  {
-                    authors: `
+  plugins: [
+    {
+      resolve: "gatsby-source-custom-api",
+      options: {
+        url: "https://my-first-api.com",
+        rootKey: "authors",
+        schemas: {
+          authors: `
                         name: String
                         description: String
-                    `
-                }
-            }
+                    `,
         },
-        {
-            resolve: "gatsby-source-custom-api",
-            options: {
-                url: "https://my-second-api.com",
-                rootKey: 'posts',
-                schemas:  {
-                    posts: `
+      },
+    },
+    {
+      resolve: "gatsby-source-custom-api",
+      options: {
+        url: "https://my-second-api.com",
+        rootKey: "posts",
+        schemas: {
+          posts: `
                         text: String
                         authors: authors @link(by: "name")
-                    `
-                }
-            }
-        }
-    ]
+                    `,
+        },
+      },
+    },
+  ],
 };
 ```
 
@@ -154,29 +163,29 @@ This is an example of how you use the required nodes to automatically generate p
 const path = require("path");
 
 exports.createPages = async ({ graphql, actions }) => {
-    const { createPage } = actions;
-    const result = await graphql(`
-        {
-            allPosts {
-                nodes {
-                    url
-                }
-            }
+  const { createPage } = actions;
+  const result = await graphql(`
+    {
+      allPosts {
+        nodes {
+          url
         }
-    `);
-    return Promise.all(
-        result.data.allPosts.nodes.map(async node => {
-            await createPage({
-                path: node.url,
-                component: path.resolve("./src/pages/post.js"),
-                context: {
-                    // Data passed to context is available
-                    // in page queries as GraphQL variables.
-                    url: node.url
-                }
-            });
-        })
-    );
+      }
+    }
+  `);
+  return Promise.all(
+    result.data.allPosts.nodes.map(async (node) => {
+      await createPage({
+        path: node.url,
+        component: path.resolve("./src/pages/post.js"),
+        context: {
+          // Data passed to context is available
+          // in page queries as GraphQL variables.
+          url: node.url,
+        },
+      });
+    })
+  );
 };
 ```
 
@@ -187,26 +196,26 @@ import React from "react";
 import { graphql } from "gatsby";
 
 const Post = ({ data }) => {
-    return <h1>{data.posts.title}</h1>;
+  return <h1>{data.posts.title}</h1>;
 };
 
 export const query = graphql`
-    query($url: String) {
-        posts(url: { eq: $url }) {
-            url
-            title
-            image {
-                local {
-                    childImageSharp {
-                        fluid(maxWidth: 2000) {
-                            ...GatsbyImageSharpFluid_withWebp
-                        }
-                    }
-                }
-                alttext
+  query ($url: String) {
+    posts(url: { eq: $url }) {
+      url
+      title
+      image {
+        local {
+          childImageSharp {
+            fluid(maxWidth: 2000) {
+              ...GatsbyImageSharpFluid_withWebp
             }
+          }
         }
+        alttext
+      }
     }
+  }
 `;
 
 export default Post;
@@ -221,4 +230,6 @@ Some of the returned keys may be transformed, if they conflict with restricted k
 Every contribution is very much appreciated.
 Feel free to file bugs, feature- and pull-requests.
 
-❤️ If this plugin is helpful for you, star it on [GitHub](https://github.com/AndreasFaust/gatsby-source-custom-api).
+❤️ Thanks to the original plugin this was forked from, please star it on [GitHub](https://github.com/AndreasFaust/gatsby-source-custom-api).
+
+❤️ If this plugin was useful, feel free to star it on [GitHub](https://github.com/acctech/gatsby-source-custom-api).

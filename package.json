@@ -1,13 +1,13 @@
 {
-  "name": "gatsby-source-custom-api",
-  "version": "2.3.6",
-  "description": "Source data from any API and transform it into Gatsby-nodes. Download your image files and use them with Gatsby Image.",
+  "name": "gatsby-source-custom-api-with-fetchoptions",
+  "version": "1.0.0",
+  "description": "Source data from any API and transform it into Gatsby-nodes. Download your image files and use them with Gatsby Image. Allows POST requests.",
   "main": "index.js",
-  "author": "Andreas Faust",
+  "author": "Danny Falero",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AndreasFaust/gatsby-source-custom-api"
+    "url": "https://github.com/acctech/gatsby-source-custom-api-with-fetchoptions"
   },
   "keywords": [
     "gatsby",

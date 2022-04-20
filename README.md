@@ -232,4 +232,4 @@ Feel free to file bugs, feature- and pull-requests.
 
 ❤️ Thanks to the original plugin this was forked from, please star it on [GitHub](https://github.com/AndreasFaust/gatsby-source-custom-api).
 
-❤️ If this plugin was useful, feel free to star it on [GitHub](https://github.com/acctech/gatsby-source-custom-api).
+❤️ If this plugin was useful, feel free to star it on [GitHub](https://github.com/acctech/gatsby-source-custom-api-with-fetchoptions).

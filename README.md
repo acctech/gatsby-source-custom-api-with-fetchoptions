@@ -1,4 +1,4 @@
-![Logo of gatsby-source-custom-api](https://github.com/andreasfaust/gatsby-source-custom-api/raw/master/gatsby-source-custom-api-logo.png)
+![Logo of gatsby-source-custom-api](https://github.com/acctech/gatsby-source-custom-api-with-fetchoptions/raw/master/gatsby-source-custom-api-logo.png)
 
 **gatsby-source-custom-api** helps you sourcing data from any API and transform it into Gatsby nodes. Define keys you want to be transformed into image-nodes and use them with **[Gatsby Image](https://www.gatsbyjs.org/packages/gatsby-image/)**.
 

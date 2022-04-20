@@ -16,7 +16,9 @@
     "api",
     "json",
     "image",
-    "cache"
+    "cache",
+    "allows-post-requests",
+    "fetchOptions"
   ],
   "scripts": {
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",

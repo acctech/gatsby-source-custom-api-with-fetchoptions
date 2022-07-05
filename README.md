@@ -6,7 +6,7 @@
 
 1. Install the package with **yarn** or **npm**
 
-`yarn add gatsby-source-custom-api`
+`yarn add gatsby-source-custom-api-with-fetchoptions`
 
 2. Add to plugins in your gatsby-config.js
 
